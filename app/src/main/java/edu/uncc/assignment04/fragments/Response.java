@@ -1,8 +1,9 @@
 package edu.uncc.assignment04.fragments;
 
-import android.util.Log;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Response {
+public class Response implements Parcelable {
     private String name;
     private String email;
     private String role;
@@ -10,10 +11,13 @@ public class Response {
     public String maritalStatus;
     public String livingStatus;
     private Integer householdIncome;
+
     // Default constructor
+    public Response() {
+    }
+
     // Parameterized constructor
-    public Response(String name, String email, String role, String educationLevel, String maritalStatus, String livingStatus, int householdIncome) {
-        // Initialize the Response object with the provided parameters
+    public Response(String name, String email, String role, String educationLevel, String maritalStatus, String livingStatus, Integer householdIncome) {
         this.name = name;
         this.email = email;
         this.role = role;
@@ -21,17 +25,47 @@ public class Response {
         this.maritalStatus = maritalStatus;
         this.livingStatus = livingStatus;
         this.householdIncome = householdIncome;
-
-        // Log each parameter individually
-        Log.d("Response", "Name: " + name);
-        Log.d("Response", "Email: " + email);
-        Log.d("Response", "Role: " + role);
-        Log.d("Response", "Education Level: " + educationLevel);
-        Log.d("Response", "Marital Status: " + maritalStatus);
-        Log.d("Response", "Living Status: " + livingStatus);
-        Log.d("Response", "Household Income: " + householdIncome);
     }
 
+    // Parcelable implementation
+    public static final Parcelable.Creator<Response> CREATOR = new Parcelable.Creator<Response>() {
+        @Override
+        public Response createFromParcel(Parcel in) {
+            return new Response(in);
+        }
+
+        @Override
+        public Response[] newArray(int size) {
+            return new Response[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return  0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(email);
+        dest.writeString(role);
+        dest.writeString(educationLevel);
+        dest.writeString(maritalStatus);
+        dest.writeString(livingStatus);
+        dest.writeValue(householdIncome);
+    }
+
+    // Constructor that takes a Parcel and gives you an object populated with its values
+    protected Response(Parcel in) {
+        name = in.readString();
+        email = in.readString();
+        role = in.readString();
+        educationLevel = in.readString();
+        maritalStatus = in.readString();
+        livingStatus = in.readString();
+        householdIncome = (Integer) in.readValue(Integer.class.getClassLoader());
+    }
 
 
     // Getter for name
@@ -89,6 +123,14 @@ public class Response {
 
     public void setHouseholdIncome(int householdIncome) {
         this.householdIncome = householdIncome;
+    }
+    public String getEducationLevel() {
+        return educationLevel;
+    }
+
+    // Setter for educationLevel
+    public void setEducationLevel(String educationLevel) {
+        this.educationLevel = educationLevel;
     }
 }
 

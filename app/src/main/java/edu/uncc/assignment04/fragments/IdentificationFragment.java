@@ -46,6 +46,11 @@ public class IdentificationFragment extends Fragment {
         binding.buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (binding.radioGroup.getCheckedRadioButtonId() == -1) {
+                    // No radio button is selected, display an error message
+                    Toast.makeText(getContext(), "Please select an Name level", Toast.LENGTH_SHORT).show();
+                    return; // Exit the method early
+                }
                 String name = binding.editTextName.getText().toString();
                 String email = binding.editTextEmail.getText().toString();
                 String role = "Student";
@@ -59,8 +64,8 @@ public class IdentificationFragment extends Fragment {
                     // Display an error message to the user
                     Toast.makeText(getContext(), "Please enter a value", Toast.LENGTH_SHORT).show();
                 } else {
-
-                    mListener.gotoSetResponse();
+                    Response response = new Response(name, email, role, null, null, null, 0);
+                    mListener.gotoSetResponse(response);
                 }
             }
         });
@@ -74,7 +79,7 @@ public class IdentificationFragment extends Fragment {
     }
 
     interface IdentificationInfoListener{
-        void gotoSetResponse();
+        void gotoSetResponse(Response response);
     }
 
 }

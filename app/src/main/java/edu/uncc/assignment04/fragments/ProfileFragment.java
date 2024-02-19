@@ -1,44 +1,30 @@
 package edu.uncc.assignment04.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import edu.uncc.assignment04.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import edu.uncc.assignment04.R;
+import edu.uncc.assignment04.databinding.FragmentProfileBinding;
+
 public class ProfileFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private Response mResponse;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    FragmentProfileBinding binding;
 
     public ProfileFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static ProfileFragment newInstance(String param1, String param2) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
@@ -52,15 +38,34 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mResponse = getArguments().getParcelable("response");
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+
+        binding = FragmentProfileBinding.inflate(inflater, container, false);
+
+        // Check if the response object is null
+        if (mResponse != null) {
+            // Update your UI with the response values
+
+            binding.textViewName.setText(mResponse.getName() != null ? mResponse.getName() : "N/A");
+            binding.textViewEmail.setText(mResponse.getEmail() != null ? mResponse.getEmail() : "N/A");
+            binding.textViewEdu.setText(mResponse.getEducationLevel() != null ? mResponse.getEducationLevel() : "N/A");
+            binding.textViewMaritalStatus.setText(mResponse.getMaritalStatus() != null ? mResponse.getMaritalStatus() : "N/A");
+            binding.textViewLivingStatus.setText(mResponse.getLivingStatus() != null ? mResponse.getLivingStatus() : "N/A");
+            binding.textViewIncomeValue.setText(String.valueOf(mResponse.getHouseholdIncome()));
+        } else {
+            // Handle the case where the response object is null
+            // For example, display a message or log an error
+        }
+
+        return binding.getRoot();
     }
+
+    // Other methods if needed...
+
 }
